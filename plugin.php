@@ -19,6 +19,8 @@ add_action( 'rest_api_init', function () {
 
 function get_content() {
     if( isset( $_GET['token'] ) ) {
+
+        // /heykramer gif
         if( isset( $_GET['command'] ) && $_GET['command'] == 'gif' ) {
             $post = get_posts( array(
                 'category_name'     =>  'gifs',
@@ -27,6 +29,7 @@ function get_content() {
             ) );
         }
 
+        // /heykramer quote
         if( isset( $_GET['command'] ) && $_GET['command'] == 'quote' ) {
             $post = get_posts( array(
                 'category_name'     =>  'quotes',
@@ -35,16 +38,19 @@ function get_content() {
             ) );
         }
 
+        // no command given? just give something random
         if( !isset($post) ) {
-            return get_posts( array(
+            $post = get_posts( array(
                 'orderby'           =>  'rand',
                 'posts_per_page'    =>  1,
             ) );
         }
 
+        // slack formatted response
         $response = array('response_type' => 'in_channel', 'text' => $post[0]->post_content);
         return  $response;
     }
 
+    // huh?
     return "these arent the droids you are looking for :wave:";
 }
